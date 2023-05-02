@@ -50,17 +50,12 @@ public class OAuthServiceImpl implements OAuthService {
             bw.write(stringBuilder);
             bw.flush();
 
-            int responseCode = connection.getResponseCode();
-            log.info("getAccessToken response code = "+ responseCode);
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = "";
             String result = "";
             while((line = br.readLine()) != null){
                 result += line;
             }
-
-            log.info("getAccessToken response body = " + result);
-            log.info("getAccessToken response body type = " + result.getClass().getName());
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
@@ -90,8 +85,6 @@ public class OAuthServiceImpl implements OAuthService {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Authorization","Bearer " + accessToken);
-            int responseCode = connection.getResponseCode();
-            log.info("resposneCode : " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
