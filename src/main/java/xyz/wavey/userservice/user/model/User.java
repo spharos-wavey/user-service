@@ -21,7 +21,7 @@ public class User {
     private String pwd;
     private String phoneNum;
     private Boolean blockList;
-    private String uuid;
+    private String UUID;
     private String nickName;
     private String secession;
     private Integer reward;
