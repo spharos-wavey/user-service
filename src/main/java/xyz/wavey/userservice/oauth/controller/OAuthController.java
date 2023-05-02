@@ -1,6 +1,7 @@
 package xyz.wavey.userservice.oauth.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,9 @@ public class OAuthController {
         ResponseGetToken responseGetToken = oauthService.getAccessToken(code);
         if (responseGetToken != null) {
             HashMap<String,Object> userInfo = oauthService.getUserInfo(responseGetToken.getAccessToken());
-            userService.userValid(userInfo.get("email").toString(), userInfo.get("nickName").toString());
+            userService.userValid(userInfo.get("email").toString()
+                    , userInfo.get("nickName").toString()
+                    , oauthService.decodeToken(responseGetToken.getIdToken()));
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization","Bearer "+responseGetToken.getIdToken());
@@ -35,4 +38,5 @@ public class OAuthController {
             return ResponseEntity.status(400).build();
         }
     }
+
 }
