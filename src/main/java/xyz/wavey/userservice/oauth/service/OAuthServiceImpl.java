@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 
 
@@ -111,6 +112,19 @@ public class OAuthServiceImpl implements OAuthService {
             e.printStackTrace();
         }
         return userInfo;
+    }
+
+    public String decodeToken(String jwt) {
+        // https://developers.kakao.com/docs/latest/ko/kakaologin/common#oidc
+        // 헤더, 페이로드, 서명이 .(온점)으로 구분되어 있음
+        // 우리가 필요한 정보 sub 는 payload에 속해있으므로 .으로 나눈 문자열 배열중 두번째 값을 복호화하여 사용
+        String payload = jwt.split("[.]")[1];
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(new String(decoder.decode(payload.getBytes())));
+
+        return element.getAsJsonObject().get("sub").getAsString();
     }
 
 }

@@ -11,12 +11,13 @@ import xyz.wavey.userservice.user.repository.UserRepo;
 @Slf4j
 public class UserServiceImpl implements UserService{
     private final UserRepo userRepo;
-    @Override
-    public void userValid(String email, String nickName) {
+
+    public void userValid(String email, String nickName, String userId) {
         if (Boolean.FALSE.equals(userRepo.existsByEmail(email))){
             userRepo.save(User.builder()
                     .email(email)
                     .nickName(nickName)
+                    .UUID(userId)
                     .build());
         }
     }
