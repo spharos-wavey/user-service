@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.oauth.vo;
+package xyz.wavey.userservice.vo;
 
 import lombok.Builder;
 import lombok.Data;

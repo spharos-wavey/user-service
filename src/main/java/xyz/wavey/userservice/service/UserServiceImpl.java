@@ -1,10 +1,10 @@
-package xyz.wavey.userservice.user.service;
+package xyz.wavey.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import xyz.wavey.userservice.user.model.User;
-import xyz.wavey.userservice.user.repository.UserRepo;
+import xyz.wavey.userservice.model.User;
+import xyz.wavey.userservice.repository.UserRepo;
 
 @Service
 @RequiredArgsConstructor

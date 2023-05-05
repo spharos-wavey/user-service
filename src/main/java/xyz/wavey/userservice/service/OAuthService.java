@@ -1,6 +1,6 @@
-package xyz.wavey.userservice.oauth.service;
+package xyz.wavey.userservice.service;
 
-import xyz.wavey.userservice.oauth.vo.ResponseGetToken;
+import xyz.wavey.userservice.vo.ResponseGetToken;
 
 import java.util.HashMap;
 

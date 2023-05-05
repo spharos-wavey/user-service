@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.security;
+package xyz.wavey.userservice.base.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

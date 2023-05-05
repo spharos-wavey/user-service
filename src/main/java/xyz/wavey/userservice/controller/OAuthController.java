@@ -1,14 +1,14 @@
-package xyz.wavey.userservice.oauth.controller;
+package xyz.wavey.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import xyz.wavey.userservice.oauth.service.OAuthService;
-import xyz.wavey.userservice.oauth.service.RedisService;
-import xyz.wavey.userservice.oauth.vo.ResponseGetToken;
-import xyz.wavey.userservice.user.service.UserService;
+import xyz.wavey.userservice.service.OAuthService;
+import xyz.wavey.userservice.service.RedisService;
+import xyz.wavey.userservice.vo.ResponseGetToken;
+import xyz.wavey.userservice.service.UserService;
 
 import java.util.HashMap;
 

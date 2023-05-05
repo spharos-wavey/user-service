@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.oauth.service;
+package xyz.wavey.userservice.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import xyz.wavey.userservice.oauth.vo.ResponseGetToken;
+import xyz.wavey.userservice.vo.ResponseGetToken;
 
 
 import java.io.BufferedReader;

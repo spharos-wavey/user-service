@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.user.service;
+package xyz.wavey.userservice.service;
 
 public interface UserService {
 

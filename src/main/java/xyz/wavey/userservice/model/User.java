@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.user.model;
+package xyz.wavey.userservice.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
