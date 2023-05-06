@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.oauth.config;
+package xyz.wavey.userservice.base.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
