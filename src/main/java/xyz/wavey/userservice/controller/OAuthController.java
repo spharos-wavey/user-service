@@ -28,7 +28,9 @@ public class OAuthController {
         if (responseGetToken != null) {
             HashMap<String,Object> userInfo = oauthService.getUserInfo(responseGetToken.getAccessToken());
             userService.userValid(userInfo.get("email").toString()
-                    , userInfo.get("nickName").toString()
+                    , userInfo.get("name").toString()
+                    , userInfo.get("ageRange").toString()
+                    , userInfo.get("phoneNumber").toString()
                     , oauthService.decodeToken(responseGetToken.getIdToken()));
 
             HttpHeaders headers = new HttpHeaders();

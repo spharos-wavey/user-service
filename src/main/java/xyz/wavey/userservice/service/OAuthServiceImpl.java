@@ -99,14 +99,18 @@ public class OAuthServiceImpl implements OAuthService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
-            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
             String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+            String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
+            String ageRange = kakaoAccount.getAsJsonObject().get("age_range").getAsString();
+            String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
 
-            userInfo.put("nickName",nickname);
+
             userInfo.put("email",email);
+            userInfo.put("name",name);
+            userInfo.put("ageRange",ageRange);
+            userInfo.put("phoneNumber",phoneNumber);
 
         } catch (Exception e){
             e.printStackTrace();
