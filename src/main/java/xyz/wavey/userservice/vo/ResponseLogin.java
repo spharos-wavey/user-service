@@ -11,4 +11,5 @@ public class ResponseLogin {
     private String ageRange;
     private String phoneNumber;
     private String nickName;
+    private String profileImage;
 }
