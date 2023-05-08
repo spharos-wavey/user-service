@@ -14,12 +14,9 @@ public class UserServiceImpl implements UserService{
     private final UserRepo userRepo;
 
     public void userValid(ResponseLogin responseLogin,String userId) {
-        char firstAgeRange = responseLogin.getAgeRange().charAt(0);
-        if (Boolean.FALSE.equals(userRepo.existsByEmail(responseLogin.getEmail())) && firstAgeRange != '1'){
+        if (Boolean.FALSE.equals(userRepo.existsByEmail(responseLogin.getEmail()))){
             userRepo.save(User.builder()
                     .email(responseLogin.getEmail())
-                    .name(responseLogin.getName())
-                    .phoneNum(responseLogin.getPhoneNumber())
                     .profileImageUrl(responseLogin.getProfileImageUrl())
                     .UUID(userId)
                     .nickName(responseLogin.getNickName())

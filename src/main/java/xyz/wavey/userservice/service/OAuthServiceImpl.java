@@ -103,14 +103,8 @@ public class OAuthServiceImpl implements OAuthService {
 
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String nickname = null;
             String profileImage = null;
 
-            try {
-                nickname = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
-            } catch (Exception e) {
-                log.error(e.toString());
-            }
 
             try{
                 profileImage = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("profile_image_url").getAsString();
@@ -118,17 +112,12 @@ public class OAuthServiceImpl implements OAuthService {
                 log.error(e.toString());
             }
 
+            String nickname = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
             String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
-            String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
-            String ageRange = kakaoAccount.getAsJsonObject().get("age_range").getAsString();
-            String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
 
             responseLogin = ResponseLogin.builder()
                     .profileImageUrl(profileImage)
-                    .ageRange(ageRange)
-                    .name(name)
                     .email(email)
-                    .phoneNumber(phoneNumber)
                     .nickName(nickname)
                     .build();
 
