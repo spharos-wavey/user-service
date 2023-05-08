@@ -18,7 +18,7 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    private String pwd;
+    private String profileImage;
     private String phoneNum;
     private Boolean blockList;
     private String UUID;
