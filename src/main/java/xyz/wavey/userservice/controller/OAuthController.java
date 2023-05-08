@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.wavey.userservice.service.OAuthService;
 import xyz.wavey.userservice.service.RedisService;
+import xyz.wavey.userservice.vo.ResponseLogin;
 import xyz.wavey.userservice.vo.ResponseGetToken;
 import xyz.wavey.userservice.service.UserService;
 
@@ -26,12 +27,10 @@ public class OAuthController {
 
         ResponseGetToken responseGetToken = oauthService.getAccessToken(code);
         if (responseGetToken != null) {
-            HashMap<String,Object> userInfo = oauthService.getUserInfo(responseGetToken.getAccessToken());
-            userService.userValid(userInfo.get("email").toString()
-                    , userInfo.get("name").toString()
-                    , userInfo.get("ageRange").toString()
-                    , userInfo.get("phoneNumber").toString()
-                    , oauthService.decodeToken(responseGetToken.getIdToken()));
+            ResponseLogin responseLogin = oauthService.getUserInfo(responseGetToken.getAccessToken());
+
+            String userId = oauthService.decodeToken(responseGetToken.getIdToken());
+            userService.userValid(responseLogin, userId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization","Bearer "+responseGetToken.getIdToken());

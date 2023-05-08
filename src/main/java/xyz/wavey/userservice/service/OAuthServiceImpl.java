@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import xyz.wavey.userservice.vo.ResponseLogin;
 import xyz.wavey.userservice.vo.ResponseGetToken;
 
 
@@ -78,7 +79,9 @@ public class OAuthServiceImpl implements OAuthService {
         return null;
     }
 
-    public HashMap<String,Object> getUserInfo(String accessToken){
+    public ResponseLogin getUserInfo(String accessToken){
+        ResponseLogin responseLogin;
+        ResponseGetToken responseGetToken;
         HashMap<String,Object> userInfo = new HashMap<>();
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
         try{
@@ -99,23 +102,33 @@ public class OAuthServiceImpl implements OAuthService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
+            //Todo 선택항목 예외처리
+            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
+            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+            String profile_image = properties.getAsJsonObject().get("profile_image_url").getAsString();
             String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
             String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
             String ageRange = kakaoAccount.getAsJsonObject().get("age_range").getAsString();
             String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
 
+            responseLogin = ResponseLogin.builder()
+                    .profileImage(profile_image)
+                    .ageRange(ageRange)
+                    .name(name)
+                    .email(email)
+                    .phoneNumber(phoneNumber)
+                    .nickName(nickname)
+                    .build();
 
-            userInfo.put("email",email);
-            userInfo.put("name",name);
-            userInfo.put("ageRange",ageRange);
-            userInfo.put("phoneNumber",phoneNumber);
+            return responseLogin;
+
 
         } catch (Exception e){
             e.printStackTrace();
         }
-        return userInfo;
+        return null;
     }
 
     public String decodeToken(String jwt) {
