@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService{
                     .email(responseLogin.getEmail())
                     .name(responseLogin.getName())
                     .phoneNum(responseLogin.getPhoneNumber())
-                    .profileImage(responseLogin.getProfileImage())
+                    .profileImageUrl(responseLogin.getProfileImageUrl())
                     .UUID(userId)
                     .nickName(responseLogin.getNickName())
                     .build());
