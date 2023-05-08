@@ -1,7 +1,9 @@
 package xyz.wavey.userservice.service;
 
+import xyz.wavey.userservice.vo.ResponseLogin;
+
 public interface UserService {
 
-    void userValid(String email, String nickName, String userId);
+    void userValid(ResponseLogin responseLogin, String userId);
 
 }

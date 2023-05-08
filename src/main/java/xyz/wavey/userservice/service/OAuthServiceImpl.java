@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import xyz.wavey.userservice.vo.ResponseLogin;
 import xyz.wavey.userservice.vo.ResponseGetToken;
 
 
@@ -78,8 +79,9 @@ public class OAuthServiceImpl implements OAuthService {
         return null;
     }
 
-    public HashMap<String,Object> getUserInfo(String accessToken){
-        HashMap<String,Object> userInfo = new HashMap<>();
+    public ResponseLogin getUserInfo(String accessToken){
+        ResponseLogin responseLogin;
+
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
         try{
             URL url  =new URL(reqUrl);
@@ -99,19 +101,44 @@ public class OAuthServiceImpl implements OAuthService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
-            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+            String nickname = null;
+            String profileImage = null;
 
-            userInfo.put("nickName",nickname);
-            userInfo.put("email",email);
+            try {
+                nickname = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
+
+            try{
+                profileImage = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("profile_image_url").getAsString();
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
+
+            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+            String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
+            String ageRange = kakaoAccount.getAsJsonObject().get("age_range").getAsString();
+            String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
+
+            responseLogin = ResponseLogin.builder()
+                    .profileImageUrl(profileImage)
+                    .ageRange(ageRange)
+                    .name(name)
+                    .email(email)
+                    .phoneNumber(phoneNumber)
+                    .nickName(nickname)
+                    .build();
+
+            return responseLogin;
+
 
         } catch (Exception e){
             e.printStackTrace();
         }
-        return userInfo;
+        return null;
     }
 
     public String decodeToken(String jwt) {
