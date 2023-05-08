@@ -81,8 +81,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     public ResponseLogin getUserInfo(String accessToken){
         ResponseLogin responseLogin;
-        ResponseGetToken responseGetToken;
-        HashMap<String,Object> userInfo = new HashMap<>();
+
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
         try{
             URL url  =new URL(reqUrl);
@@ -102,19 +101,30 @@ public class OAuthServiceImpl implements OAuthService {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
-            //Todo 선택항목 예외처리
-            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-            String profile_image = properties.getAsJsonObject().get("profile_image_url").getAsString();
+            String nickname = null;
+            String profileImage = null;
+
+            try {
+                nickname = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
+
+            try{
+                profileImage = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("profile_image_url").getAsString();
+            } catch (Exception e) {
+                log.error(e.toString());
+            }
+
             String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
             String name = kakaoAccount.getAsJsonObject().get("name").getAsString();
             String ageRange = kakaoAccount.getAsJsonObject().get("age_range").getAsString();
             String phoneNumber = kakaoAccount.getAsJsonObject().get("phone_number").getAsString();
 
             responseLogin = ResponseLogin.builder()
-                    .profileImage(profile_image)
+                    .profileImageUrl(profileImage)
                     .ageRange(ageRange)
                     .name(name)
                     .email(email)
