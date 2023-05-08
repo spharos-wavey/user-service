@@ -1,10 +1,12 @@
 package xyz.wavey.userservice.service;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import xyz.wavey.userservice.model.User;
 import xyz.wavey.userservice.repository.UserRepo;
+import xyz.wavey.userservice.vo.ResponseLogin;
 
 @Service
 @RequiredArgsConstructor
@@ -12,14 +14,16 @@ import xyz.wavey.userservice.repository.UserRepo;
 public class UserServiceImpl implements UserService{
     private final UserRepo userRepo;
 
-    public void userValid(String email, String name, String ageRange, String phoneNumber, String userId) {
-        char firstAgeRange = ageRange.charAt(0);
-        if (Boolean.FALSE.equals(userRepo.existsByEmail(email)) && firstAgeRange != '1'){
+    public void userValid(ResponseLogin responseLogin,String userId) {
+        char firstAgeRange = responseLogin.getAgeRange().charAt(0);
+        if (Boolean.FALSE.equals(userRepo.existsByEmail(responseLogin.getEmail())) && firstAgeRange != '1'){
             userRepo.save(User.builder()
-                    .email(email)
-                    .name(name)
-                    .phoneNum(phoneNumber)
+                    .email(responseLogin.getEmail())
+                    .name(responseLogin.getName())
+                    .phoneNum(responseLogin.getPhoneNumber())
+                    .profileImage(responseLogin.getProfileImage())
                     .UUID(userId)
+                    .nickName(responseLogin.getNickName())
                     .build());
         }
     }
