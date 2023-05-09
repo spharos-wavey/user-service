@@ -6,7 +6,12 @@ import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import xyz.wavey.userservice.model.User;
+import xyz.wavey.userservice.repository.UserRepo;
+import xyz.wavey.userservice.vo.RequestLogin;
 import xyz.wavey.userservice.vo.ResponseLogin;
 import xyz.wavey.userservice.vo.ResponseGetToken;
 
@@ -19,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.UUID;
 
 
 @Service
@@ -31,6 +37,8 @@ public class OAuthServiceImpl implements OAuthService {
     private  String redirectUri;
     @Value("${spring.security.oauth2.client.registration.kakao.authorization-grant-type}")
     private  String grantType;
+
+    private final UserRepo userRepo;
 
 
     public ResponseGetToken getAccessToken(String code){
@@ -143,4 +151,28 @@ public class OAuthServiceImpl implements OAuthService {
         return element.getAsJsonObject().get("sub").getAsString();
     }
 
+    public void userValid(ResponseLogin responseLogin,String userId) {
+        if (Boolean.FALSE.equals(userRepo.existsByEmail(responseLogin.getEmail()))){
+            userRepo.save(User.builder()
+                    .email(responseLogin.getEmail())
+                    .profileImageUrl(responseLogin.getProfileImageUrl())
+                    .uuid(userId)
+                    .nickName(responseLogin.getNickName())
+                    .build());
+        }
+    }
+    @Override
+    public ResponseEntity<Object> login(RequestLogin requestLogin) {
+        if (Boolean.FALSE.equals(userRepo.existsByEmail(requestLogin.getEmail()))) { //디비에 존재 안하면
+            UUID uuid = UUID.randomUUID();
+            userRepo.save(User.builder()
+                    .email(requestLogin.getEmail())
+                    .profileImageUrl(requestLogin.getProfileImageUrl())
+                    .uuid(uuid.toString())
+                    .nickName(requestLogin.getNickName())
+                    .build());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+        return null;
+    }
 }
