@@ -1,9 +1,6 @@
 package xyz.wavey.userservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import xyz.wavey.userservice.base.BaseTimeEntity;
 
@@ -18,11 +15,16 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(nullable = false)
     private String email;
     private String profileImageUrl;
     private String phoneNum;
-    private Boolean blockList;
+    @Builder.Default private Boolean blockList = false; //기본값은 false
+    @Column(nullable = false)
+
     private String UUID;
+    @Column(nullable = false)
+
     private String nickName;
     private String secession;
     private Integer reward;
