@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService{
                     .uuid(uuid.toString())
                     .nickName(requestLogin.getNickName())
                     .build());
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         return null;
     }
