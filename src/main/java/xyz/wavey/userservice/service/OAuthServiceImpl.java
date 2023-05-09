@@ -173,6 +173,6 @@ public class OAuthServiceImpl implements OAuthService {
                     .build());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
