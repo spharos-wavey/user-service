@@ -21,10 +21,8 @@ public class User extends BaseTimeEntity {
     private String phoneNum;
     @Builder.Default private Boolean blockList = false; //기본값은 false
     @Column(nullable = false)
-
-    private String UUID;
+    private String uuid;
     @Column(nullable = false)
-
     private String nickName;
     private String secession;
     private Integer reward;

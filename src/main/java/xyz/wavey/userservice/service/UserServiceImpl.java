@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService{
             userRepo.save(User.builder()
                     .email(responseLogin.getEmail())
                     .profileImageUrl(responseLogin.getProfileImageUrl())
-                    .UUID(userId)
+                    .uuid(userId)
                     .nickName(responseLogin.getNickName())
                     .build());
         }
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
             userRepo.save(User.builder()
                     .email(requestLogin.getEmail())
                     .profileImageUrl(requestLogin.getProfileImageUrl())
-                    .UUID(uuid.toString())
+                    .uuid(uuid.toString())
                     .nickName(requestLogin.getNickName())
                     .build());
             return ResponseEntity.status(HttpStatus.OK).build();
