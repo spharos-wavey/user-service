@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
-import xyz.wavey.userservice.base.config.JwtService;
 import xyz.wavey.userservice.base.exception.ServiceException;
 import xyz.wavey.userservice.model.User;
 import xyz.wavey.userservice.repository.UserRepo;
