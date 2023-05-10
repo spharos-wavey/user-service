@@ -1,10 +1,10 @@
 package xyz.wavey.userservice.service;
 
-import org.springframework.http.ResponseEntity;
 import xyz.wavey.userservice.vo.RequestLogin;
+import xyz.wavey.userservice.vo.ResponseLogin;
 
 public interface OAuthService {
 
-    ResponseEntity<Object> login(RequestLogin requestLogin);
+    ResponseLogin login(RequestLogin requestLogin);
 
 }

@@ -2,8 +2,7 @@ package xyz.wavey.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import xyz.wavey.userservice.base.config.JwtService;
 import xyz.wavey.userservice.base.exception.ServiceException;
@@ -25,7 +24,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     private final JwtService jwtService;
 
-    public ResponseEntity<Object> login(RequestLogin requestLogin) {
+    public ResponseLogin login(RequestLogin requestLogin) {
         if (Boolean.FALSE.equals(userRepo.existsByEmail(requestLogin.getEmail()))) { //디비에 존재 안하면 회원가입
             UUID uuid = UUID.randomUUID();
             userRepo.save(User.builder()
@@ -41,6 +40,6 @@ public class OAuthServiceImpl implements OAuthService {
         String accessToken = jwtService.generateToken(user);
         ResponseLogin responseLogin = ResponseLogin.builder()
                 .accessToken(accessToken).build();
-        return ResponseEntity.status(HttpStatus.OK).body(responseLogin.getAccessToken());
+        return responseLogin;
     }
 }

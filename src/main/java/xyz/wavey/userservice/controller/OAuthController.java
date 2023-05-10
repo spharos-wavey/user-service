@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import xyz.wavey.userservice.service.OAuthService;
 import xyz.wavey.userservice.vo.RequestLogin;
+import xyz.wavey.userservice.vo.ResponseLogin;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,9 +18,9 @@ public class OAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody RequestLogin requestLogin){
-       ResponseEntity response =  oauthService.login(requestLogin);
+       ResponseLogin responseLogin = oauthService.login(requestLogin);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, response.getBody().toString());
+        headers.add(HttpHeaders.AUTHORIZATION, responseLogin.getAccessToken());
         return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
     }
 }
