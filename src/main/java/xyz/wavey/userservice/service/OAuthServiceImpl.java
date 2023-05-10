@@ -1,29 +1,13 @@
 package xyz.wavey.userservice.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import xyz.wavey.userservice.model.User;
 import xyz.wavey.userservice.repository.UserRepo;
 import xyz.wavey.userservice.vo.RequestLogin;
-import xyz.wavey.userservice.vo.ResponseLogin;
-import xyz.wavey.userservice.vo.ResponseGetToken;
-
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -31,137 +15,10 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private  String clientId;
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private  String redirectUri;
-    @Value("${spring.security.oauth2.client.registration.kakao.authorization-grant-type}")
-    private  String grantType;
 
     private final UserRepo userRepo;
 
 
-    public ResponseGetToken getAccessToken(String code){
-        ResponseGetToken responseGetToken;
-        String reqURL = "https://kauth.kakao.com/oauth/token";
-
-        try{
-            URL url = new URL(reqURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-            String stringBuilder = "grant_type=" + grantType +
-                    "&client_id=" + clientId +
-                    "&redirect_uri=" + redirectUri +
-                    "&code=" + code;
-
-            bw.write(stringBuilder);
-            bw.flush();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = "";
-            String result = "";
-            while((line = br.readLine()) != null){
-                result += line;
-            }
-
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
-
-            responseGetToken = ResponseGetToken.builder()
-                    .accessToken(element.getAsJsonObject().get("access_token").getAsString())
-                    .refreshToken(element.getAsJsonObject().get("refresh_token").getAsString())
-                    .idToken(element.getAsJsonObject().get("id_token").getAsString())
-                    .build();
-
-            br.close();
-            bw.close();
-
-            return responseGetToken;
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public ResponseLogin getUserInfo(String accessToken){
-        ResponseLogin responseLogin;
-
-        String reqUrl = "https://kapi.kakao.com/v2/user/me";
-        try{
-            URL url  =new URL(reqUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Authorization","Bearer " + accessToken);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            String line = "";
-            String result = "";
-
-            while ((line = br.readLine()) != null){
-                result += line;
-            }
-
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
-
-            JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-
-            String profileImage = null;
-
-
-            try{
-                profileImage = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("profile_image_url").getAsString();
-            } catch (Exception e) {
-                log.error(e.toString());
-            }
-
-            String nickname = kakaoAccount.getAsJsonObject().get("profile").getAsJsonObject().get("nickname").getAsString();
-            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
-
-            responseLogin = ResponseLogin.builder()
-                    .profileImageUrl(profileImage)
-                    .email(email)
-                    .nickName(nickname)
-                    .build();
-
-            return responseLogin;
-
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String decodeToken(String jwt) {
-        // https://developers.kakao.com/docs/latest/ko/kakaologin/common#oidc
-        // 헤더, 페이로드, 서명이 .(온점)으로 구분되어 있음
-        // 우리가 필요한 정보 sub 는 payload에 속해있으므로 .으로 나눈 문자열 배열중 두번째 값을 복호화하여 사용
-        String payload = jwt.split("[.]")[1];
-        Base64.Decoder decoder = Base64.getDecoder();
-
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(new String(decoder.decode(payload.getBytes())));
-
-        return element.getAsJsonObject().get("sub").getAsString();
-    }
-
-    public void userValid(ResponseLogin responseLogin,String userId) {
-        if (Boolean.FALSE.equals(userRepo.existsByEmail(responseLogin.getEmail()))){
-            userRepo.save(User.builder()
-                    .email(responseLogin.getEmail())
-                    .profileImageUrl(responseLogin.getProfileImageUrl())
-                    .uuid(userId)
-                    .nickName(responseLogin.getNickName())
-                    .build());
-        }
-    }
-    @Override
     public ResponseEntity<Object> login(RequestLogin requestLogin) {
         if (Boolean.FALSE.equals(userRepo.existsByEmail(requestLogin.getEmail()))) { //디비에 존재 안하면
             UUID uuid = UUID.randomUUID();
