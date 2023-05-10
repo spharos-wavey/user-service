@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.base.config;
+package xyz.wavey.userservice.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
