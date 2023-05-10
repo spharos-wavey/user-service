@@ -13,8 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
-        throws Exception {
+            throws Exception {
         http
+                .csrf().disable()
                 .oauth2Login();
 
         return http.build();
