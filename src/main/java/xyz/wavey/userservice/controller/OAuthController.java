@@ -18,7 +18,7 @@ public class OAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody RequestLogin requestLogin){
-       ResponseLogin responseLogin = oauthService.login(requestLogin);
+        ResponseLogin responseLogin = oauthService.login(requestLogin);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, responseLogin.getAccessToken());
         return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
