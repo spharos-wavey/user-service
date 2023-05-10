@@ -22,13 +22,6 @@ public class JwtService {
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
-    public String extractUsername(String jwt) {
-        return extractClaim(jwt, Claims::getSubject);
-    }
-    public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(jwt);
-        return claimsResolver.apply(claims);
-    }
 
     public String generateToken(UserDetails userDetails) {
         return Jwts
@@ -38,16 +31,6 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //하루
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-
-    private Claims extractAllClaims(String jwt) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(jwt)
-                .getBody();
     }
 
     private Key getSignKey() {
