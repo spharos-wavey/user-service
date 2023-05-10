@@ -5,10 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import xyz.wavey.userservice.base.config.JwtService;
+import xyz.wavey.userservice.base.exception.ServiceException;
 import xyz.wavey.userservice.model.User;
 import xyz.wavey.userservice.repository.UserRepo;
 import xyz.wavey.userservice.vo.RequestLogin;
+import xyz.wavey.userservice.vo.ResponseLogin;
 import java.util.UUID;
+
+import static xyz.wavey.userservice.base.exception.ErrorCode.NOT_FOUND_USER;
 
 
 @Service
@@ -18,9 +23,10 @@ public class OAuthServiceImpl implements OAuthService {
 
     private final UserRepo userRepo;
 
+    private final JwtService jwtService;
 
     public ResponseEntity<Object> login(RequestLogin requestLogin) {
-        if (Boolean.FALSE.equals(userRepo.existsByEmail(requestLogin.getEmail()))) { //디비에 존재 안하면
+        if (Boolean.FALSE.equals(userRepo.existsByEmail(requestLogin.getEmail()))) { //디비에 존재 안하면 회원가입
             UUID uuid = UUID.randomUUID();
             userRepo.save(User.builder()
                     .email(requestLogin.getEmail())
@@ -28,8 +34,13 @@ public class OAuthServiceImpl implements OAuthService {
                     .uuid(uuid.toString())
                     .nickName(requestLogin.getNickName())
                     .build());
-            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
+        //이미 회원이면 로그인
+        User user = userRepo.findByEmail(requestLogin.getEmail()).orElseThrow(()
+                -> new ServiceException(NOT_FOUND_USER.getMessage(),NOT_FOUND_USER.getHttpStatus()));
+        String accessToken = jwtService.generateToken(user);
+        ResponseLogin responseLogin = ResponseLogin.builder()
+                .accessToken(accessToken).build();
+        return ResponseEntity.status(HttpStatus.OK).body(responseLogin.getAccessToken());
     }
 }
