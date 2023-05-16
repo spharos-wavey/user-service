@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.oauth.service;
+package xyz.wavey.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import xyz.wavey.userservice.oauth.vo.ResponseGetToken;
+import xyz.wavey.userservice.vo.ResponseGetToken;
 
 import java.util.LinkedHashMap;
 

@@ -1,8 +1,12 @@
-package xyz.wavey.userservice.user.repository;
+package xyz.wavey.userservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import xyz.wavey.userservice.user.model.User;
+import xyz.wavey.userservice.model.User;
+
+import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User,Long> {
     Boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
+
 }

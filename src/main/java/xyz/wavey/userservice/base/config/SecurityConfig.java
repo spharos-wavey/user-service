@@ -1,4 +1,4 @@
-package xyz.wavey.userservice.security;
+package xyz.wavey.userservice.base.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
-        throws Exception {
+            throws Exception {
         http
-                .oauth2Login();
+                .csrf().disable();
 
         return http.build();
     }

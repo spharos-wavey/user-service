@@ -1,11 +1,9 @@
-package xyz.wavey.userservice.oauth.vo;
+package xyz.wavey.userservice.vo;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class ResponseGetToken {
+public class RequestToken {
 
     private String accessToken;
     private String refreshToken;
