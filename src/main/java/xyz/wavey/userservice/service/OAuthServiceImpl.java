@@ -37,8 +37,8 @@ public class OAuthServiceImpl implements OAuthService {
         User user = userRepo.findByEmail(requestLogin.getEmail()).orElseThrow(()
                 -> new ServiceException(NOT_FOUND_USER.getMessage(),NOT_FOUND_USER.getHttpStatus()));
         String accessToken = jwtService.generateToken(user);
-        ResponseLogin responseLogin = ResponseLogin.builder()
+        return ResponseLogin.builder()
+                .uuid(user.getUuid())
                 .accessToken(accessToken).build();
-        return responseLogin;
     }
 }

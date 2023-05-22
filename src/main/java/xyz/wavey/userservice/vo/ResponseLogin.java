@@ -9,4 +9,6 @@ public class ResponseLogin {
 
     private String accessToken;
 
+    private String uuid;
+
 }
