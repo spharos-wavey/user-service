@@ -20,11 +20,19 @@ public class JwtService {
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
+    @Value("${audience}")
+    private String audience;
+
+    @Value("${issuer}")
+    private String issuer;
+
 
     public String generateToken(UserDetails userDetails) {
         return Jwts
                 .builder()
                 .setSubject(userDetails.getUsername())
+                .setAudience(audience)
+                .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //하루
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
