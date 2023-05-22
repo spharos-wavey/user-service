@@ -17,13 +17,13 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtService {
-    @Value("${SECRET_KEY}")
+    @Value("${jwt.SECRET_KEY}")
     private String SECRET_KEY;
 
-    @Value("${AUDIENCE}")
+    @Value("${jwt.AUDIENCE}")
     private String AUDIENCE;
 
-    @Value("${ISSUER}")
+    @Value("${jwt.ISSUER}")
     private String ISSUER;
 
 
