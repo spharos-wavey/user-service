@@ -21,7 +21,7 @@ public class OAuthController {
         ResponseLogin responseLogin = oauthService.login(requestLogin);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, responseLogin.getAccessToken());
-        headers.add("uuid", responseLogin.getUuid());
+        headers.add("uid", responseLogin.getUuid());
         return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
     }
 }
