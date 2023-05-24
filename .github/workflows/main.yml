@@ -51,5 +51,6 @@ jobs:
           key: ${{ secrets.SSH_KEY}}
           port: ${{ secrets.PORT }}
           script: |
-            docker-compose -f docker-compose.user.yml down --rmi all
-            docker-compose -f docker-compose.user.yml up -d --scale app=5
+            docker-compose -f docker-compose.user.yml down
+            docker image rm ${{secrets.DOCKERHUB_USERNAME}}/user-service:latest
+            docker-compose -f docker-compose.user.yml up -d
