@@ -23,7 +23,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String email;
     private String profileImageUrl;
     private String phoneNum;
-    @Builder.Default private Boolean blockList = false; //기본값은 false
+    @Builder.Default
+    private Boolean blockList = false;
     @Column(nullable = false)
     private String uuid;
     @Column(nullable = false)

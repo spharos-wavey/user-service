@@ -17,7 +17,7 @@ import static xyz.wavey.userservice.base.exception.ErrorCode.NOT_FOUND_USER;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OAuthServiceImpl implements OAuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepo userRepo;
 
