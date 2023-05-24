@@ -52,5 +52,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker-compose -f docker-compose.user.yml down --rmi all
-            docker-compose -f docker-compose.user.yml up -d
-            docker ps
+            docker-compose -f docker-compose.user.yml up -d --scale app=5
