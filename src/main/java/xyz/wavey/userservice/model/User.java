@@ -30,7 +30,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private String nickName;
     private String secession;
-    private Integer reward;
+    @Builder.Default
+    private Integer reward = 10000;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
