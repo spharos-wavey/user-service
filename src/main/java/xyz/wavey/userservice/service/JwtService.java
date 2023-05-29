@@ -17,14 +17,22 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtService {
-    @Value("${SECRET_KEY}")
+    @Value("${jwt.SECRET_KEY}")
     private String SECRET_KEY;
+
+    @Value("${jwt.AUDIENCE}")
+    private String AUDIENCE;
+
+    @Value("${jwt.ISSUER}")
+    private String ISSUER;
 
 
     public String generateToken(UserDetails userDetails) {
         return Jwts
                 .builder()
                 .setSubject(userDetails.getUsername())
+                .setAudience(AUDIENCE)
+                .setIssuer(ISSUER)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //하루
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
