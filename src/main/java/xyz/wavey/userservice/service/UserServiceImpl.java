@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import xyz.wavey.userservice.base.exception.ServiceException;
 import xyz.wavey.userservice.repository.UserRepo;
+import xyz.wavey.userservice.vo.ResponseGetReward;
 
 import static xyz.wavey.userservice.base.exception.ErrorCode.*;
 
@@ -22,6 +23,14 @@ public class UserServiceImpl implements UserService {
                 .body(userRepo.findByUuid(uuid)
                         .orElseThrow(() -> new ServiceException(NOT_FOUND_USER.getMessage(), NOT_FOUND_USER.getHttpStatus()))
                         .getId());
+    }
+
+    @Override
+    public ResponseGetReward getReward(String uuid) {
+        return ResponseGetReward.builder()
+                .reward(userRepo.findByUuid(uuid).orElseThrow(() ->
+                        new ServiceException(NOT_FOUND_USER.getMessage(), NOT_FOUND_USER.getHttpStatus())).getReward())
+                .build();
     }
 
 }
