@@ -39,18 +39,18 @@ jobs:
         run: |
           docker build -t ${{secrets.DOCKERHUB_USERNAME}}/user-service .
           docker push ${{secrets.DOCKERHUB_USERNAME}}/user-service
-  CD:
-    runs-on: ubuntu-latest
-    needs: CI
-    steps:
-      - name: executing remote ssh commands using ssh key
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY}}
-          port: ${{ secrets.PORT }}
-          script: |
-            docker-compose -f docker-compose.user.yml down
-            docker image rm ${{secrets.DOCKERHUB_USERNAME}}/user-service:latest
-            docker-compose -f docker-compose.user.yml up -d
+#   CD:
+#     runs-on: ubuntu-latest
+#     needs: CI
+#     steps:
+#       - name: executing remote ssh commands using ssh key
+#         uses: appleboy/ssh-action@v0.1.10
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           key: ${{ secrets.SSH_KEY}}
+#           port: ${{ secrets.PORT }}
+#           script: |
+#             docker-compose -f docker-compose.user.yml down
+#             docker image rm ${{secrets.DOCKERHUB_USERNAME}}/user-service:latest
+#             docker-compose -f docker-compose.user.yml up -d
